@@ -1,0 +1,28 @@
+import sqlite3
+
+conn = sqlite3.connect('empresas.db')
+c = conn.cursor()
+
+c.execute('''CREATE TABLE IF NOT EXISTS empresas (
+                id INTEGER PRIMARY KEY,
+                nome TEXT NOT NULL,
+                categoria TEXT,
+                localizacao TEXT,
+                telefone TEXT,
+                site TEXT,
+                descricao TEXT
+            )''')
+
+def adicionar_empresa(nome, categoria, localizacao, telefone, site, descricao):
+    c.execute("INSERT INTO empresas (nome, categoria, localizacao, telefone, site, descricao) VALUES (?, ?, ?, ?, ?, ?)",
+              (nome, categoria, localizacao, telefone, site, descricao))
+    conn.commit()
+
+adicionar_empresa("Tech Solutions", "Tecnologia", "São Paulo", "11 99999-9999", "www.techsolutions.com", "Soluções em tecnologia da informação.")
+adicionar_empresa("Green Farms", "Agronegócio", "Curitiba", "41 88888-8888", "www.greenfarms.com", "Produção de alimentos sustentáveis.")
+
+c.execute("SELECT * FROM empresas")
+for row in c.fetchall():
+    print(row)
+
+conn.close()
